@@ -65,6 +65,8 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions colored-man-pages httpi
 
 source $ZSH/oh-my-zsh.sh
 
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
