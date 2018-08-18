@@ -102,3 +102,7 @@ alias vi="vim"
 
 
 eval $(thefuck --alias)
+
+  # Beginning search with arrow keys
+bindkey "^[OA" up-line-or-beginning-search
+bindkey "^[OB" down-line-or-beginning-search
