@@ -23,6 +23,7 @@ Plugin 'raichoo/purescript-vim'
 Plugin 'frigoeu/psc-ide-vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'yggdroot/indentline'
+Plugin 'tpope/vim-fugitive'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
