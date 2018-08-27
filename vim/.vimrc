@@ -1,36 +1,25 @@
 " Plugins
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
+call plug#begin('~/.vim/plugged')
+Plug 'VundleVim/Vundle.vim'
+Plug 'jacoborus/tender.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'tasn/vim-tsx'
+Plug 'dikiaap/minimalist'
+Plug 'scrooloose/nerdtree'
+Plug 'dylanaraps/crayon'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vim-scripts/CycleColor'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plug 'raichoo/purescript-vim'
+Plug 'frigoeu/psc-ide-vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'yggdroot/indentline'
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/fzf.vim'
+call plug#end()
 
-" Plugin 'itchyny/lightline.vim'
-Plugin 'jacoborus/tender.vim'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'tasn/vim-tsx'
-Plugin 'dikiaap/minimalist'
-Plugin 'scrooloose/nerdtree'
-Plugin 'dylanaraps/crayon'
-"Bundle 'https://github.com/neilagabriel/vim-geeknote'
-" Bundle 'gabrielelana/vim-markdown'
-Plugin 'vim-pandoc/vim-pandoc'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
-Plugin 'vim-scripts/CycleColor'
-Plugin 'francoiscabrol/ranger.vim'
-Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plugin 'raichoo/purescript-vim'
-Plugin 'frigoeu/psc-ide-vim'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'yggdroot/indentline'
-Plugin 'tpope/vim-fugitive'
-Plugin 'junegunn/fzf.vim'
-call vundle#end()            " required
-filetype plugin indent on    " required
-
-" Other
-filetype on
-syntax on
 
 set termguicolors
 set t_Co=256
