@@ -24,6 +24,7 @@ Plugin 'frigoeu/psc-ide-vim'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'yggdroot/indentline'
 Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/fzf.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -101,3 +102,24 @@ let g:netrw_list_hide= netrw_gitignore#Hide('my_gitignore_file')
 autocmd FileType purescript :iabbrev <buffer> forall ∀
 
 let g:syntastic_enable_balloons = 1
+
+set diffopt+=vertical
+
+let g:fzf_command_prefix = 'Fz'
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+
