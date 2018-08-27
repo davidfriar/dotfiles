@@ -1,6 +1,5 @@
 " Plugins
 call plug#begin('~/.vim/plugged')
-Plug 'VundleVim/Vundle.vim'
 Plug 'jacoborus/tender.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'tasn/vim-tsx'
