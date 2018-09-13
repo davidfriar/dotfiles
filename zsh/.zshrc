@@ -97,6 +97,8 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias vi="vim"
+alias v='f -t -e vim -b viminfo'
+alias ra="source ranger"
 
 
 
@@ -106,3 +108,16 @@ eval $(thefuck --alias)
   # Beginning search with arrow keys
 bindkey "^[OA" up-line-or-beginning-search
 bindkey "^[OB" down-line-or-beginning-search
+
+path+=~/bin
+
+
+opgp() {
+  eval $(op signin my)
+  op get item $1| jq '.details.fields[]|select(.designation=="password").value'
+}
+
+ eval "$(fasd --init auto)"
+
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh

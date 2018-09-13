@@ -3,7 +3,8 @@
 #audible_bell = false
 clickable_url = true
 #dynamic_title = true
-font = Roboto Mono for Powerline 14
+#font = Roboto Mono for Powerline 14
+font = Roboto Mono Nerd Font 12
 #fullscreen = true
 #geometry = 640x480
 #icon_name = terminal
@@ -18,7 +19,7 @@ scrollback_lines = 10000
 #hyperlinks = false
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
-browser = firefox
+browser = chromium
 
 # "system", "on" or "off"
 #cursor_blink = system
@@ -40,7 +41,7 @@ browser = firefox
 
 [colors]
 highlight = #2f2f2f
-background = "#000000"
+background = rgba(0,0,0,1.0)
 cursor = "#ffffff"
 foreground = "#ffffff"
 color0 = #000000
