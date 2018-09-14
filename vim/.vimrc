@@ -56,7 +56,8 @@ Plug 'elzr/vim-json'
 " Plug 'dkorolev/typescript-vim'
 " Plug 'HerringtonDarkholme/yats.vim'
 Plug 'leafgarland/typescript-vim', {'for': ['typescript', 'typescript.tsx']}
-Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
+" Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
+Plug 'davidfriar/vim-tsx', { 'for': 'typescript.tsx' }
 "Plug 'peitalin/vim-jsx-typescript'
 " Plug 'Quramy/tsuquyomi'
 
@@ -243,4 +244,3 @@ set autoread
 set encoding=utf-8
 
 
-" a test
