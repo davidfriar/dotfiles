@@ -12,6 +12,7 @@ Plug 'lifepillar/vim-solarized8'
 
 " === Misc
 Plug 'scrooloose/nerdtree'
+Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -34,6 +35,8 @@ Plug 'tommcdo/vim-exchange'
 " Plug 'skywind3000/asyncrun.vim'
 Plug 'w0rp/ale'
 Plug 'Valloric/YouCompleteMe'
+Plug 'tpope/vim-projectionist'
+
 
 " === Purescript
 Plug 'raichoo/purescript-vim'
@@ -154,6 +157,9 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeQuitOnOpen = 1
+let NERDTreeHijackNetrw = 0
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 let mapleader=";"
 let maplocalleader="\\"
