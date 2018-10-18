@@ -100,6 +100,7 @@ let g:ale_set_balloons= 1
 
 let g:ycm_enable_diagnostic_highlighting = 0
 
+let g:pandoc#syntax#conceal#use =0
 
 " autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
 " autocmd BufWritePost *.ts,*.tsx AsyncRun -post=checktime ./node_modules/.bin/tslint --fix % && npx prettier --parser typescript --write %
