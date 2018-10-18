@@ -25,7 +25,7 @@ browser = chromium
 #cursor_blink = system
 
 # "block", "underline" or "ibeam"
-#cursor_shape = block
+cursor_shape = block
 
 # Hide links that are no longer valid in url select overlay mode
 #filter_unmatched_urls = true
@@ -43,6 +43,7 @@ browser = chromium
 highlight = #2f2f2f
 background = rgba(0,0,0,1.0)
 cursor = "#ffffff"
+cursor_foreground="#ff0000"
 foreground = "#ffffff"
 color0 = #000000
 color1 = #cc0000

@@ -30,6 +30,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tommcdo/vim-exchange'
+Plug 'tpope/vim-eunuch'
+Plug 'KabbAmine/vCoolor.vim'
+
+
 
 " === IDE
 " Plug 'skywind3000/asyncrun.vim'
@@ -64,6 +68,9 @@ Plug 'davidfriar/vim-tsx', { 'for': 'typescript.tsx' }
 "Plug 'peitalin/vim-jsx-typescript'
 " Plug 'Quramy/tsuquyomi'
 
+" === LATEX
+Plug 'lervag/vimtex'
+
 call plug#end()
 
 let g:UltiSnipsExpandTrigger="<c-_>"
@@ -85,7 +92,10 @@ let g:ale_fixers = {
 \   'javascript': ['eslint', 'prettier'],
 \   'typescript': ['tslint', 'prettier'],
 \   'typescript.tsx': ['tslint', 'prettier'],
+\   'css': ['prettier'],
+\   'html': ['tidy']
 \}
+
 let g:ale_set_balloons= 1
 
 let g:ycm_enable_diagnostic_highlighting = 0
@@ -118,22 +128,28 @@ if g:colors_name=="tender"
 endif
 
 if g:colors_name=~"^base16-"
-  au InsertEnter * call Base16hi("Normal","","000000","","","","")
-  au InsertLeave * call Base16hi("Normal","",g:base16_gui00,"","","","")
+  au InsertEnter * call Base16hi("CursorLine","","101010","","","","")
+  au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
+  au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
+  au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
   call Base16hi("LineNr",g:base16_gui03,g:base16_gui00,"","","","")
-  call Base16hi("Comment",g:base16_gui03,g:base16_gui00,"","","italic","")
+  call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
   call Base16hi("SignColumn","",g:base16_gui00,"","","","")
   call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
   call Base16hi("GitGutterChange","",g:base16_gui00,"","","","")
   call Base16hi("GitGutterDelete","",g:base16_gui00,"","","","")
   call Base16hi("GitGutterChangeDelete","",g:base16_gui00,"","","","")
   call Base16hi("NonText",g:base16_gui02,"","","","","")
-  call Base16hi("SpecialKey",g:base16_gui02,"","","","","")
+  call Base16hi("SpecialKey",g:base16_gui03,"","","","","")
   call Base16hi("Error","ff0000",g:base16_gui00,"","","","")
   call Base16hi("ALEError","ff0000","","","","underline","")
   call Base16hi("YcmErrorSign","ff0000","","","","","")
   call Base16hi("YcmErrorSection","ff0000","","","","underline","")
   let g:indentLine_color_gui = '#282a2e'
+  let g:indentLine_concealcursor=0
+  au VimEnter * call matchadd('SpecialKey', '\s', -1)
+  au VimEnter * call matchadd('SpecialKey', '$', -1)
+  set cursorline
   hi! link typescriptReserved Keyword
   hi! link jsxCloseTag jsxTag
   hi! link jsxCloseString jsxTag
@@ -167,6 +183,22 @@ let maplocalleader="\\"
 map <leader>s :source ~/.vimrc<CR>
 map <leader>t :NERDTreeToggle<CR>
 vmap <leader>c "+y
+map <leader>o :call SetBG("NONE")<CR>
+map <leader>O :call SetBG("#".g:base16_gui00)<CR>
+
+
+function! SetBG(colour)
+  exec "hi Normal guibg=" . a:colour
+  exec "hi Comment guibg=" . a:colour
+  exec "hi LineNr guibg=" . a:colour
+  exec "hi SignColumn guibg=" . a:colour
+  exec "hi GitGutterAdd guibg=" . a:colour
+  exec "hi GitGutterChange guibg=" . a:colour
+  exec "hi GitGutterDelete guibg=" . a:colour
+  exec "hi GitGutterChangeDelete guibg=" . a:colour
+endfunction
+
+
 " Quick jumping between splits
 map <C-J> <C-W>j
 map <C-K> <C-W>k
@@ -248,5 +280,22 @@ let g:fzf_colors =
 
 set autoread
 set encoding=utf-8
+
+
+let g:vimtex_view_method='zathura'
+
+" Open some binaries with external tools
+autocmd BufReadCmd *.pdf silent !zathura % &
+autocmd BufEnter *.pdf bdelete
+autocmd BufReadCmd *.png silent !xdg-open % &
+autocmd BufEnter *.png bdelete
+autocmd BufReadCmd *.jpg silent !xdg-open % &
+autocmd BufEnter *.jpg bdelete
+autocmd BufReadCmd *.jpeg silent !xdg-open % &
+autocmd BufEnter *.jpeg bdelete
+autocmd BufReadCmd *.gif silent !xdg-open % &
+autocmd BufEnter *.gif bdelete
+autocmd BufReadCmd *.ico silent !xdg-open % &
+autocmd BufEnter *.ico bdelete
 
 

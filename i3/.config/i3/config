@@ -25,7 +25,7 @@ floating_modifier $mod
 # ============================================================================
 #
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -85,8 +85,7 @@ bindsym $mod+space focus mode_toggle
 # focus the parent container
 bindsym $mod+a focus parent
 
-# show key bindings in rofi
-bindsym $mod+b exec /home/david/bin/keybindingsmenu
+
 bindsym $mod+Shift+b exec /home/david/bin/keybindingsmenu -e
 
 #show layout manager
@@ -100,6 +99,8 @@ bindsym $mod+p exec /home/david/bin/layout-manager/layout_manager.sh
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
+# restart compton
+bindsym $mod+c exec pkill compton && compton -f
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -123,6 +124,9 @@ bindsym XF86MonBrightnessUp   exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 bindsym XF86KbdBrightnessUp   exec xbacklight -ctrl smc::kbd_backlight -inc 10
 bindsym XF86KbdBrightnessDown exec xbacklight -ctrl smc::kbd_backlight -dec 10
+
+
+bindcode 107 exec /home/david/bin/random-wallpaper.sh
 
 
 # ============================================================================
@@ -168,6 +172,11 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 
 
 # ============================================================================
+# ================== Move between screens ====================
+# ============================================================================
+bindsym $mod+x move workspace to output right
+
+# ============================================================================
 # ================== Resize Mode                          ====================
 # ============================================================================
 
@@ -202,14 +211,16 @@ bindsym $mod+r mode "resize"
 # ================== Gaps Mode                            ====================
 # ============================================================================
 
-set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps Gaps: (o) outer, (i) inner, (t) transparency
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_transparency Transparency: +(lighter) -(darker)
 bindsym $mod+Shift+g mode "$mode_gaps"
 
 mode "$mode_gaps" {
         bindsym o      mode "$mode_gaps_outer"
         bindsym i      mode "$mode_gaps_inner"
+        bindsym t      mode "$mode_transparency"
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
@@ -239,6 +250,13 @@ mode "$mode_gaps_outer" {
         bindsym Escape mode "default"
 }
 
+mode "$mode_transparency" {
+        bindsym plus  exec /home/david/bin/opacity.sh -.1
+        bindsym minus exec /home/david/bin/opacity.sh +.1
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
 
 # ============================================================================
 # ================== Theming                              ====================
@@ -297,8 +315,8 @@ bar {
 assign [class="Chromium"] → $ws2
 assign [class="Spotify"] → $ws10
 assign [class="noson"] → $ws10
-
-
+assign [class="Gimp"] → $ws4
+assign [class="libreoffice"] → $ws3
 for_window [class="Yad"] floating enable
 
 
@@ -306,10 +324,9 @@ for_window [class="Yad"] floating enable
 # ================== Run apps at startup                       ===============
 # ============================================================================
 
-# exec --no-startup-id i3-msg 'exec termite -e vim ; exec termite ; split vertical ; exec termite'
 
 
-exec --no-startup-id termite
+exec --no-startup-id alacritty
 exec --no-startup-id noson-app
 exec --no-startup-id chromium
-
+exec --no-startup-id home/david/bin/random-wallpaper.sh

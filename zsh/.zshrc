@@ -114,10 +114,14 @@ path+=~/bin
 
 opgp() {
   eval $(op signin my)
-  op get item $1| jq '.details.fields[]|select(.designation=="password").value'
+  op get item $1| jq -r '.details.fields[]|select(.designation=="password").value'
 }
 
  eval "$(fasd --init auto)"
 
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
+
+ export PATH=~/.npm-global/bin:$PATH
