@@ -78,7 +78,7 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 let g:user_emmet_mode='iv'
-let g:user_emmet_leader_key='<leader>'
+let g:user_emmet_leader_key=';'
 let g:user_emmet_settings = { 'javascript.jsx' : {  'extends' : 'jsx', }, }
 
 let g:ale_lint_on_save = 1
@@ -178,7 +178,7 @@ let NERDTreeHijackNetrw = 0
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-let mapleader=";"
+let mapleader=" "
 let maplocalleader="\\"
 
 map <leader>s :source ~/.vimrc<CR>
