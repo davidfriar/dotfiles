@@ -91,9 +91,10 @@ bindsym $mod+Shift+b exec /home/david/bin/keybindingsmenu -e
 #show layout manager
 bindsym $mod+p exec /home/david/bin/layout-manager/layout_manager.sh
 #/layout_manager.sh
-#
-#
-#
+
+#open evernote web
+bindsym $mod+n exec chromium --app=http://www.evernote.com/Home.action
+
 # focus the child container
 #bindsym $mod+d focus child
 
@@ -312,6 +313,8 @@ bar {
 # ==================  Assign apps to workspaces            ===================
 # ============================================================================
 
+assign [instance="mail.cognifide.com"] → $ws9
+assign [class="Slack"] → $ws9
 assign [class="Chromium"] → $ws2
 assign [class="Spotify"] → $ws10
 assign [class="noson"] → $ws10
@@ -330,3 +333,6 @@ exec --no-startup-id alacritty
 exec --no-startup-id noson-app
 exec --no-startup-id chromium
 exec --no-startup-id home/david/bin/random-wallpaper.sh
+exec --no-startup-id chromium --app=http://mail.cognifide.com
+exec --no-startup-id slack
+
