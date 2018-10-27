@@ -133,7 +133,8 @@ if g:colors_name=~"^base16-"
   au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
   au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
   au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
-  call Base16hi("LineNr",g:base16_gui03,g:base16_gui00,"","","","")
+  call Base16hi("LineNr",g:base16_gui04,g:base16_gui00,"","","","")
+  call Base16hi("CursorLineNr",g:base16_gui05,g:base16_gui00,"","","","")
   call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
   call Base16hi("SignColumn","",g:base16_gui00,"","","","")
   call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
@@ -161,6 +162,11 @@ if g:colors_name=~"^base16-"
   hi! link embeddedTsStart Statement
   hi! link embeddedTsEnd Statement
   hi Visual guifg=#282828 guibg=#c9d05c
+  highlight DiffAdd    guifg=#000000 guibg=#99cc99
+  highlight DiffDelete guifg=#000000 guibg=#f2777a
+  highlight DiffChange guifg=#000000 guibg=#ffcc66
+  highlight DiffText   guifg=#ef2929 guibg=#ffcc66
+
 endif
 
 " let g:indentLine_char = '¦'
@@ -175,8 +181,11 @@ let NERDTreeDirArrows = 1
 let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHijackNetrw = 0
+let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+let g:filebeagle_show_hidden = 1
 
 let mapleader=" "
 let maplocalleader="\\"
@@ -186,6 +195,9 @@ map <leader>t :NERDTreeToggle<CR>
 vmap <leader>c "+y
 map <leader>o :call SetBG("NONE")<CR>
 map <leader>O :call SetBG("#".g:base16_gui00)<CR>
+nmap <leader>n :set relativenumber!<CR>
+nmap <leader>N :set number!<CR>
+
 
 
 function! SetBG(colour)
