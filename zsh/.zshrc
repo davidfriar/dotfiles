@@ -96,6 +96,8 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+export EDITOR='vim'
+
 alias vi="vim"
 alias v='f -t -e vim -b viminfo'
 alias ra="source ranger"
