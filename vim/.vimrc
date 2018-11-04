@@ -33,6 +33,8 @@ Plug 'tommcdo/vim-exchange'
 Plug 'tpope/vim-eunuch'
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'sjl/gundo.vim'
+Plug 'vim-scripts/VisIncr'
+Plug 'drwx/calutil.vim'
 
 
 
