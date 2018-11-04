@@ -110,11 +110,17 @@ bindkey "^[OA" up-line-or-beginning-search
 bindkey "^[OB" down-line-or-beginning-search
 
 path+=~/bin
+path+=~/.gem/ruby/2.5.0/bin
+
 
 
 opgp() {
   eval $(op signin my)
   op get item $1| jq -r '.details.fields[]|select(.designation=="password").value'
+}
+
+opgpp(){
+  opgp $1 | xsel -i
 }
 
  eval "$(fasd --init auto)"
@@ -125,3 +131,5 @@ source /usr/share/fzf/completion.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
  export PATH=~/.npm-global/bin:$PATH
+
+export EDITOR=vim

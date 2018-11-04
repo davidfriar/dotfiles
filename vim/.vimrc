@@ -32,6 +32,7 @@ Plug 'honza/vim-snippets'
 Plug 'tommcdo/vim-exchange'
 Plug 'tpope/vim-eunuch'
 Plug 'KabbAmine/vCoolor.vim'
+Plug 'sjl/gundo.vim'
 
 
 
@@ -198,6 +199,10 @@ map <leader>O :call SetBG("#".g:base16_gui00)<CR>
 nmap <leader>n :set relativenumber!<CR>
 nmap <leader>N :set number!<CR>
 
+"highlight last inserted text
+nnoremap gV `[v`]
+
+nnoremap <leader>u :GundoToggle<CR>
 
 
 function! SetBG(colour)
@@ -311,4 +316,18 @@ autocmd BufEnter *.gif bdelete
 autocmd BufReadCmd *.ico silent !xdg-open % &
 autocmd BufEnter *.ico bdelete
 
+set wildmenu
 
+
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undo")
+    call mkdir($HOME."/.vim/undo", "", 0700)
+endif
+if !isdirectory($HOME."/.vim/swap")
+    call mkdir($HOME."/.vim/swap", "", 0700)
+endif
+set undodir=~/.vim/undo//
+set undofile
+set directory=~/.vim/swap//
