@@ -74,7 +74,15 @@ Plug 'davidfriar/vim-tsx', { 'for': 'typescript.tsx' }
 " === LATEX
 Plug 'lervag/vimtex'
 
+" === Python
+" Plug 'riher/python-mode',{ 'branch': 'fix/py3-importlib' }
+Plug 'vim-python/python-syntax'
+
 call plug#end()
+
+
+let g:pymode_python = 'python3'
+let g:python_highlight_all = 1
 
 let g:UltiSnipsExpandTrigger="<c-_>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -84,20 +92,26 @@ let g:user_emmet_mode='iv'
 let g:user_emmet_leader_key=';'
 let g:user_emmet_settings = { 'javascript.jsx' : {  'extends' : 'jsx', }, }
 
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-let g:ale_sign_warning = '.'
+let g:ale_sign_warning = '●'
 let g:ycm_error_symbol = '●'
-let g:ycm_warning_symbol = '.'
+let g:ycm_warning_symbol = '●'
 let g:ale_fix_on_save = 1
 let g:ale_fixers = {
 \   'javascript': ['eslint', 'prettier'],
 \   'typescript': ['tslint', 'prettier'],
 \   'typescript.tsx': ['tslint', 'prettier'],
 \   'css': ['prettier'],
-\   'html': ['tidy']
+\   'html': ['tidy'],
+\   'python': [ 'add_blank_lines_for_python_control_statements', 'autopep8',
+\     'black', 'isort', 'remove_trailing_lines', 'trim_whitespace', 'yapf']
 \}
+
 
 let g:ale_set_balloons= 1
 
