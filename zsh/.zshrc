@@ -113,6 +113,7 @@ bindkey "^[OB" down-line-or-beginning-search
 
 path+=~/bin
 path+=~/.gem/ruby/2.5.0/bin
+path+=~/.local/bin
 
 
 
