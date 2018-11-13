@@ -84,6 +84,8 @@ call plug#end()
 let g:pymode_python = 'python3'
 let g:python_highlight_all = 1
 
+let g:gundo_prefer_python3 = 1
+
 let g:UltiSnipsExpandTrigger="<c-_>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
