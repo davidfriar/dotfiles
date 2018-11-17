@@ -1,5 +1,5 @@
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
-PROMPT='${ret_status} %{$fg[cyan]%}%~%{$reset_color%}$(git_prompt_info) '
+PROMPT='${ret_status}%{$fg[black]%}%{$bg[yellow]%}$(virtualenv_prompt_info)%{$reset_color%} %{$fg[cyan]%}%~%{$reset_color%}$(git_prompt_info) '
 
 
 local BATTERY_GAUGE_PREFIX=' '
@@ -12,3 +12,7 @@ ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[magenta]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="] %{$fg[yellow]%}✗"
 ZSH_THEME_GIT_PROMPT_CLEAN="]"
+
+ZSH_THEME_VIRTUALENV_PREFIX="  "
+ZSH_THEME_VIRTUALENV_SUFFIX=" "
+
