@@ -12,8 +12,8 @@
 // set theme
 settings.theme = `
 .sk_theme {
-    font-family: Input Sans Condensed, Charcoal, sans-serif;
-    font-size: 10pt;
+    font-family: Noto Sans Nerd Font, Input Sans Condensed, Charcoal, sans-serif;
+    font-size: 14pt;
     background: #24272e;
     color: #abb2bf;
 }
@@ -24,19 +24,19 @@ settings.theme = `
     color: #d0d0d0;
 }
 .sk_theme .url {
-    color: #61afef;
+    color: #06989a;
 }
 .sk_theme .annotation {
-    color: #56b6c2;
+    color: #75507b;
 }
 .sk_theme .omnibar_highlight {
-    color: #528bff;
+    color: #3465a4;
 }
 .sk_theme .omnibar_timestamp {
-    color: #e5c07b;
+    color: #c4a000;
 }
 .sk_theme .omnibar_visitcount {
-    color: #98c379;
+    color: #4e9a06;
 }
 .sk_theme #sk_omnibarSearchResult>ul>li:nth-child(odd) {
     background: #303030;
