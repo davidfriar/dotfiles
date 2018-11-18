@@ -1,5 +1,5 @@
 local ret_status="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
-PROMPT='${ret_status}%{$fg[black]%}%{$bg[yellow]%}$(virtualenv_prompt_info)%{$reset_color%} %{$fg[cyan]%}%~%{$reset_color%}$(git_prompt_info) '
+PROMPT='%{$fg[black]%}%{$bg[yellow]%}$(virtualenv_prompt_info)%{$reset_color%} ${ret_status}%{$fg[cyan]%}%~%{$reset_color%}$(git_prompt_info) '
 
 
 local BATTERY_GAUGE_PREFIX=' '
