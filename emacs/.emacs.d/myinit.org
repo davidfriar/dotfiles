@@ -1,22 +1,44 @@
 #+STARTUP: overview 
 #+PROPERTY: header-args :comments yes :results silent
-* Global Interface Tweaks
+* Global Tweaks
 Get rid of menu and toolbar etc...
 #+BEGIN_SRC emacs-lisp
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
+(display-time-mode 1)
+(global-display-line-numbers-mode 1)
 (global-whitespace-mode 1)
 (global-hl-line-mode 1)
 (global-prettify-symbols-mode 1)
-#+END_SRC
+(setq sentence-end-double-space nil)
+#+end_src 
+** Whitespace mode 
+#+BEGIN_SRC emacs-lisp
+  (require 'whitespace)
+  (setq whitespace-style (quote (face spaces tabs newline space-mark tab-mark newline-mark )))
+  (setq whitespace-display-mappings
+    ;; all numbers are Unicode codepoint in decimal. ⁖ (insert-char 182 1)
+    '(
+      (space-mark 32 [183] [46]) ; 32 SPACE 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+      (newline-mark 10 [172 10]) ; 10 LINE FEED
+      (tab-mark 9 [9655 9] [92 9]) ; 9 TAB, 9655 WHITE RIGHT-POINTING TRIANGLE 「▷」
+      ))
 
-* Other
+
+#+end_src
+** Tabs and indents
+#+BEGIN_SRC emacs-lisp
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+
+#+end_src 
+* Evil Mode 
 #+BEGIN_SRC emacs-lisp
 (use-package evil
   :ensure t
   :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-integration t) ;; this is optional since it's already set to t by default.
   (setq evil-want-keybinding nil)
   :config
   (evil-mode 1))
@@ -26,16 +48,51 @@ Get rid of menu and toolbar etc...
   :ensure t
   :custom (evil-collection-setup-minibuffer t)
   :init (evil-collection-init))
-(use-package magit :ensure t)
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
-(use-package diminish :ensure t)
+#+end_src 
+
+* Helm
+#+begin_src emacs-lisp
 (use-package helm
   :ensure t
   :config
     (require 'helm-config)
+    (setq helm-display-header-line nil)
+    (set-face-attribute 'helm-source-header nil :height 0.1)
+    (helm-autoresize-mode 1)
+    (setq helm-autoresize-max-height 30)
+    (setq helm-autoresize-min-height 30)
+    (setq helm-split-window-in-side-p t)
     (helm-mode 1))
+#+END_SRC
+* General Programming Stuff
+** Comments 
+#+BEGIN_SRC emacs-lisp
+(use-package evil-commentary 
+  :ensure t
+  :config (evil-commentary-mode)
+)
+#+end_src 
+** AutoComplete 
+#+BEGIN_SRC emacs-lisp
+(use-package company               
+  :ensure t
+  :init (global-company-mode)
+  :diminish company-mode)
+  
+#+end_src 
+** Magit
+#+BEGIN_SRC emacs-lisp
+(use-package magit :ensure t :after evil)
+(use-package evil-magit 
+   :ensure t) 
+#+end_src 
+* other
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters :ensure t)
+(use-package which-key
+  :ensure t
+  :config (which-key-mode))
+(use-package diminish :ensure t)
 (use-package color-theme-sanityinc-tomorrow :ensure t)
 (use-package powerline-evil :ensure t)
 (use-package powerline
@@ -65,42 +122,8 @@ Get rid of menu and toolbar etc...
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
-(require 'whitespace)
-(setq whitespace-style (quote (face spaces tabs newline space-mark tab-mark newline-mark )))
-(setq whitespace-display-mappings
-  ;; all numbers are Unicode codepoint in decimal. ⁖ (insert-char 182 1)
-  '(
-    (space-mark 32 [183] [46]) ; 32 SPACE 「 」, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
-    (newline-mark 10 [172 10]) ; 10 LINE FEED
-    (tab-mark 9 [9655 9] [92 9]) ; 9 TAB, 9655 WHITE RIGHT-POINTING TRIANGLE 「▷」
-    ))
 
-(global-linum-mode t)
-(eval-after-load 'linum
-  '(progn
-     (defface linum-leading-zero
-       `((t :inherit 'linum
-            :foreground ,(face-attribute 'linum :background nil t)))
-       "Face for displaying leading zeroes for line numbers in display margin."
-       :group 'linum)
 
-     (add-hook 'linum-before-numbering-hook
-           (lambda ()
-             (setq-local linum-format-width (length (number-to-string
-                 (count-lines (point-min) (point-max)))))))
-     
-     (defun linum-format-func (line)
-         (concat
-        (propertize (make-string (- linum-format-width (length (number-to-string line))) ?0)
-                      'face 'linum-leading-zero)
-          (propertize (number-to-string line) 'face 'linum)))
-      (setq linum-format 'linum-format-func)))
-
-(use-package auto-complete 
-  :ensure t
-  :init
-    (ac-config-default)
-    (global-auto-complete-mode t))
 
 
 #+END_SRC
