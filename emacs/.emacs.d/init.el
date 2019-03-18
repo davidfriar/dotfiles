@@ -1,4 +1,5 @@
 (setq inhibit-startup-message t)
+(setq vc-follow-symlinks t)
 (require 'package)
 
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
@@ -15,8 +16,6 @@
 
 (eval-when-compile
   (require 'use-package))
-
-
 
 
 (custom-set-variables
@@ -37,7 +36,9 @@
  '(fci-rule-color "#515151")
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
  '(frame-background-mode (quote dark))
- '(package-selected-packages (quote (which-key evil-visual-mark-mode)))
+ '(package-selected-packages
+   (quote
+    (treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-projectile projectile hydra git-gutter general evil-magit neotree all-the-icons powerline-evil color-theme-sanityinc-tomorrow diminish company evil-commentary rainbow-delimiters which-key evil-visual-mark-mode)))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
@@ -71,4 +72,6 @@
  '(whitespace-tab ((t (:foreground "gray24" :background nil)))))
 
 (org-babel-load-file (expand-file-name "~/.emacs.d/myinit.org"))
+
+
 

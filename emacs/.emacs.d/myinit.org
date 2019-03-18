@@ -12,6 +12,8 @@ Get rid of menu and toolbar etc...
 (global-hl-line-mode 1)
 (global-prettify-symbols-mode 1)
 (setq sentence-end-double-space nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq vc-follow-symlinks t)
 #+end_src 
 ** Whitespace mode 
 #+BEGIN_SRC emacs-lisp
@@ -33,6 +35,29 @@ Get rid of menu and toolbar etc...
 (setq-default indent-tabs-mode nil)
 
 #+end_src 
+** Recent files 
+#+BEGIN_SRC emacs-lisp
+(recentf-mode 1)
+(setq-default recent-save-file "~/.emacs.d/recentf")
+#+end_src 
+* Keybindings
+#+BEGIN_SRC emacs-lisp
+(use-package general
+    :ensure t
+    :config
+       (general-define-key
+           :states '(normal visual insert emacs)
+           :prefix "SPC"
+           :non-normal-prefix "M-SPC"
+               ":" '(helm-M-x :which-key "helm-M-x")
+               "t" '(treemacs :which-key "toggle treemacs")
+               "G" '(magit-status :which-key "magit")
+               "g" '(hydra-git-gutter/body :which-key "git gutter")
+               "b" '(helm-mini :which-key "helm mini")
+               "p" '(projectile-command-map :which-key "projectile")
+))
+(use-package hydra :ensure t)
+#+end_src 
 * Evil Mode 
 #+BEGIN_SRC emacs-lisp
 (use-package evil
@@ -48,22 +73,159 @@ Get rid of menu and toolbar etc...
   :ensure t
   :custom (evil-collection-setup-minibuffer t)
   :init (evil-collection-init))
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 #+end_src 
 
 * Helm
 #+begin_src emacs-lisp
-(use-package helm
-  :ensure t
-  :config
-    (require 'helm-config)
-    (setq helm-display-header-line nil)
-    (set-face-attribute 'helm-source-header nil :height 0.1)
-    (helm-autoresize-mode 1)
-    (setq helm-autoresize-max-height 30)
-    (setq helm-autoresize-min-height 30)
-    (setq helm-split-window-in-side-p t)
-    (helm-mode 1))
+  (use-package helm
+    :ensure t
+    :config
+      (require 'helm-config)
+      (setq helm-display-header-line nil)
+      (set-face-attribute 'helm-source-header nil :height 1.0)
+      (helm-autoresize-mode 1)
+      (setq helm-autoresize-max-height 30)
+      (setq helm-autoresize-min-height 30)
+      ;; (setq helm-split-window-in-side-p t)
+      (helm-mode 1))
+      
+(defhydra helm-like-unite (:hint nil
+                           :color pink)
+  "
+Nav ^^^^^^^^^        Mark ^^          Other ^^       Quit
+^^^^^^^^^^------------^^----------------^^----------------------
+_K_ ^ ^ _k_ ^ ^     _m_ark           _v_iew         _i_: cancel
+^↕^ _h_ ^✜^ _l_     _t_oggle mark    _H_elp         _o_: quit
+_J_ ^ ^ _j_ ^ ^     _U_nmark all     _d_elete
+^^^^^^^^^^                           _f_ollow: %(helm-attr 'follow)
+"
+  ;; arrows
+  ("h" helm-beginning-of-buffer)
+  ("j" helm-next-line)
+  ("k" helm-previous-line)
+  ("l" helm-end-of-buffer)
+  ;; beginning/end
+  ("g" helm-beginning-of-buffer)
+  ("G" helm-end-of-buffer)
+  ;; scroll
+  ("K" helm-scroll-other-window-down)
+  ("J" helm-scroll-other-window)
+  ;; mark
+  ("m" helm-toggle-visible-mark)
+  ("t" helm-toggle-all-marks)
+  ("U" helm-unmark-all)
+  ;; exit
+  ("<escape>" keyboard-escape-quit "" :exit t)
+  ("o" keyboard-escape-quit :exit t)
+  ("i" nil)
+  ;; sources
+  ("}" helm-next-source)
+  ("{" helm-previous-source)
+  ;; rest
+  ("H" helm-help)
+  ("v" helm-execute-persistent-action)
+  ("d" helm-persistent-delete-marked)
+  ("f" helm-follow-mode))
+
+(define-key helm-map (kbd "<escape>") 'helm-like-unite/body)
+(define-key helm-map (kbd "C-k") 'helm-like-unite/body)
+(define-key helm-map (kbd "C-o") 'helm-like-unite/body)
 #+END_SRC
+* Projectile 
+#+begin_src emacs-lisp
+(use-package projectile
+    :ensure t
+    :config (projectile-mode +1))
+(use-package helm-projectile
+    :ensure t
+    :config (helm-projectile-on))
+    
+#+END_SRC
+* Treemacs 
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (with-eval-after-load 'winum
+      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    :config
+    (progn
+      (setq treemacs-collapse-dirs                 (if (executable-find "python") 3 0)
+            treemacs-deferred-git-apply-delay      0.5
+            treemacs-display-in-side-window        nil
+            treemacs-file-event-delay              5000
+            treemacs-file-follow-delay             0.2
+            treemacs-follow-after-init             t
+            treemacs-git-command-pipe              ""
+            treemacs-goto-tag-strategy             'refetch-index
+            treemacs-indentation                   2
+            treemacs-indentation-string            " "
+            treemacs-is-never-other-window         nil
+            treemacs-max-git-entries               5000
+            treemacs-no-png-images                 nil
+            treemacs-no-delete-other-windows       t
+            treemacs-project-follow-cleanup        nil
+            treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+            treemacs-recenter-distance             0.1
+            treemacs-recenter-after-file-follow    nil
+            treemacs-recenter-after-tag-follow     nil
+            treemacs-recenter-after-project-jump   'always
+            treemacs-recenter-after-project-expand 'on-distance
+            treemacs-show-cursor                   nil
+            treemacs-show-hidden-files             t
+            treemacs-silent-filewatch              nil
+            treemacs-silent-refresh                nil
+            treemacs-sorting                       'alphabetic-desc
+            treemacs-space-between-root-nodes      t
+            treemacs-tag-follow-cleanup            t
+            treemacs-tag-follow-delay              1.5
+            treemacs-width                         35)
+
+      ;; The default width and height of the icons is 22 pixels. If you are
+      ;; using a Hi-DPI display, uncomment this to double the icon size.
+      (treemacs-resize-icons 16)
+      (set-face-attribute 'treemacs-root-face nil :height 1.0 :underline nil)
+      (add-hook 'treemacs-mode-hook (lambda() (display-line-numbers-mode -1)))
+      (treemacs-follow-mode t)
+      (treemacs-filewatch-mode t)
+      (treemacs-fringe-indicator-mode t)
+      (pcase (cons (not (null (executable-find "git")))
+                   (not (null (executable-find "python3"))))
+        (`(t . t)
+         (treemacs-git-mode 'deferred))
+        (`(t . _)
+         (treemacs-git-mode 'simple))))
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-use)))
+
+  (use-package treemacs-evil
+    :after treemacs evil
+    :ensure t)
+
+  (use-package treemacs-projectile
+    :after treemacs projectile
+    :ensure t)
+
+  (use-package treemacs-icons-dired
+    :after treemacs dired
+    :ensure t
+    :config (treemacs-icons-dired-mode))
+
+  (use-package treemacs-magit
+    :after treemacs magit
+    :ensure t)
+#+end_src 
 * General Programming Stuff
 ** Comments 
 #+BEGIN_SRC emacs-lisp
@@ -86,42 +248,74 @@ Get rid of menu and toolbar etc...
 (use-package evil-magit 
    :ensure t) 
 #+end_src 
+** GitGutter 
+#+BEGIN_SRC emacs-lisp
+(use-package git-gutter 
+    :ensure t 
+    :config (global-git-gutter-mode +1))
+(defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
+                            :hint nil)
+  "
+Git gutter:
+  _j_: next hunk        _s_tage hunk     _q_uit
+  _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
+  ^ ^                   _p_opup hunk
+  _h_: first hunk
+  _l_: last hunk        set start _R_evision
+"
+  ("j" git-gutter:next-hunk)
+  ("k" git-gutter:previous-hunk)
+  ("h" (progn (goto-char (point-min))
+              (git-gutter:next-hunk 1)))
+  ("l" (progn (goto-char (point-min))
+              (git-gutter:previous-hunk 1)))
+  ("s" git-gutter:stage-hunk)
+  ("r" git-gutter:revert-hunk)
+  ("p" git-gutter:popup-hunk)
+  ("R" git-gutter:set-start-revision)
+  ("q" nil :color blue)
+  ("Q" (progn (git-gutter-mode -1)
+              ;; git-gutter-fringe doesn't seem to
+              ;; clear the markup right away
+              (sit-for 0.1)
+              (git-gutter:clear))
+       :color blue))
+#+end_src 
 * other
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters :ensure t)
-(use-package which-key
-  :ensure t
-  :config (which-key-mode))
-(use-package diminish :ensure t)
-(use-package color-theme-sanityinc-tomorrow :ensure t)
-(use-package powerline-evil :ensure t)
-(use-package powerline
-  :ensure t
-  :config (powerline-evil-center-color-theme))
-(use-package all-the-icons :ensure t)
-(use-package neotree
-  :ensure t
-  :config (global-set-key [f8] 'neotree-toggle))
-(use-package org
-  :ensure t
-  :mode ("\\.org\\'" . org-mode))
+  (use-package rainbow-delimiters :ensure t)
+  (use-package which-key
+    :ensure t
+    :config (which-key-mode))
+  (use-package diminish :ensure t)
+  (use-package color-theme-sanityinc-tomorrow :ensure t)
+  (use-package powerline-evil :ensure t)
+  (use-package powerline
+    :ensure t
+    :config (powerline-evil-center-color-theme))
+  (use-package all-the-icons :ensure t)
+  (use-package neotree
+    :ensure t
+    :config (global-set-key [f8] 'neotree-toggle))
+  (use-package org
+    :ensure t
+    :mode ("\\.org\\'" . org-mode))
 
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
-(setq savehist-file "~/.emacs.d/savehist")
-(savehist-mode 1)
-(setq history-length t)
-(setq history-delete-duplicates t)
-(setq savehist-save-minibuffer-history 1)
-(setq savehist-additional-variables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
+  (setq savehist-file "~/.emacs.d/savehist")
+  (savehist-mode 1)
+  (setq history-length t)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables
+        '(kill-ring
+          search-ring
+          regexp-search-ring))
 
-(global-undo-tree-mode)
-(setq undo-tree-auto-save-history t)
-(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
-
+  (global-undo-tree-mode)
+  (setq undo-tree-auto-save-history t)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
 
 
