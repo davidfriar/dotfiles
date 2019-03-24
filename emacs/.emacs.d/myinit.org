@@ -62,6 +62,7 @@ Get rid of menu and toolbar etc...
                "a" '(:ignore t :which-key "Applications")
                "ar" 'ranger
                "ac" 'calc
+               "c" 'org-capture
 ))  
 (use-package hydra :ensure t)
 #+end_src 
@@ -203,11 +204,69 @@ Get rid of menu and toolbar etc...
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure t
-    :mode ("\\.org\\'" . org-mode))
+    :mode ("\\.org\\'" . org-mode)
+    :config 
+        (setq org-default-notes-file "~/Dropbox (Cognifide)/org/inbox.org")
+        (add-hook 'org-capture-mode-hook (lambda() 
+            (evil-insert-state)
+            (setq-local header-line-format nil)
+            ))
+         (add-to-list 'org-modules 'org-protocol)
+         (setq org-capture-templates '(
+             ("t" "Todo" entry (file+headline "" "Tasks")
+             "* TODO %?\n%U" :empty-lines 1)
+             ("T" "Todo with Clipboard" entry (file+headline "" "Tasks")
+             "* TODO %?\n%U\n   %c" :empty-lines 1)
+             ("i" "Idea" entry (file+headline "" "Ideas")
+             "* %?\n%U" :empty-lines 1)
+             ("I" "Idea with Clipboard" entry (file+headline "" "Ideas")
+             "* %?\n%U\n   %c" :empty-lines 1)))
+
+        (defvar my-org-capture-before-config nil
+        "Window configuration before `org-capture'.")
+
+        (defadvice org-capture (before save-config activate)
+        "Save the window configuration before `org-capture'."
+        (setq my-org-capture-before-config (current-window-configuration)))
+
+        (add-hook 'org-capture-mode-hook 'delete-other-windows)
+        (defun my-org-capture-cleanup ()
+        "Clean up the frame created while capturing via org-protocol."
+        ;; In case we run capture from emacs itself and not an external app,
+        ;; we want to restore the old window config
+        (when my-org-capture-before-config
+            (set-window-configuration my-org-capture-before-config))
+        (-when-let ((&alist 'name name) (frame-parameters))
+            (when (equal name "org-protocol-capture")
+            (delete-frame))))
+
+        (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
+  )
+
+  (use-package org-protocol 
+    :after org
+    :init (server-start)
+    :config
+        (add-to-list 'org-capture-templates
+               '("L" "Web link with selection" entry (file+headline "" "Links")
+                 "* %?[[%:link][%:description]] %U\n%i\n" :immediate-finish t :empty-lines 1))
+        (add-to-list 'org-capture-templates
+               '("l" "Web link" entry (file+headline "" "Links")
+                 "* %?[[%:link][%:description]] %U\n" :immediate-finish t :empty-lines 1)))
 (use-package org-bullets
   :ensure t
   :hook (org-mode . org-bullets-mode))
-
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme)))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+  
 #+END_SRC
 
 * General Programming Stuff

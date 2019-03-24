@@ -38,7 +38,7 @@
  '(frame-background-mode (quote dark))
  '(package-selected-packages
    (quote
-    (org-bullets helm-company helm-descbinds helm-ag ranger treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-projectile projectile hydra git-gutter general evil-magit neotree all-the-icons powerline-evil color-theme-sanityinc-tomorrow diminish company evil-commentary rainbow-delimiters which-key evil-visual-mark-mode)))
+    (org-protocol evil-org org-bullets helm-company helm-descbinds helm-ag ranger treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-projectile projectile hydra git-gutter general evil-magit neotree all-the-icons powerline-evil color-theme-sanityinc-tomorrow diminish company evil-commentary rainbow-delimiters which-key evil-visual-mark-mode)))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
@@ -75,3 +75,4 @@
 
 
 
+(put 'narrow-to-region 'disabled nil)

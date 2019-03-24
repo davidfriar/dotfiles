@@ -31,7 +31,7 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+q kill
 
 # start rofi (a program launcher)
-bindsym $mod+d exec rofi -show run
+bindsym $mod+d exec rofi -show drun
 bindsym $mod+Shift+d exec rofi -show window
 
 bindsym $mod+m exec qmenu_hud
@@ -98,6 +98,12 @@ bindsym $mod+p exec /home/david/bin/layout-manager/layout_manager.sh
 
 #open evernote web
 bindsym $mod+n exec chromium --app=http://www.evernote.com/Home.action
+
+# capture tasks and ideas
+bindsym $mod+t exec emacsclient -cn -F '((name . \"org-protocol-capture\")(height . 20)(width . 80))' 'org-protocol://capture?template=t'
+bindsym $mod+Shift+t exec emacsclient -cn -F '((name . \"org-protocol-capture\")(height . 20)(width . 80))' 'org-protocol://capture?template=T'
+bindsym $mod+i exec emacsclient -cn -F '((name . \"org-protocol-capture\")(height . 20)(width . 80))' 'org-protocol://capture?template=i'
+bindsym $mod+Shift+i exec emacsclient -cn -F '((name . \"org-protocol-capture\")(height . 20)(width . 80))' 'org-protocol://capture?template=I'
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -328,6 +334,7 @@ assign [class="noson"] → $ws10
 assign [class="Gimp"] → $ws4
 assign [class="libreoffice"] → $ws3
 for_window [class="Yad"] floating enable
+for_window [title="org-protocol-capture"] floating enable
 
 
 # ============================================================================
