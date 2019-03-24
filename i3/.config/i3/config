@@ -111,7 +111,7 @@ bindsym $mod+Shift+i exec emacsclient -cn -F '((name . \"org-protocol-capture\")
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart compton
-bindsym $mod+c exec pkill compton && compton -f
+# bindsym $mod+c exec pkill compton && compton -f
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
