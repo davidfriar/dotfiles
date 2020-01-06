@@ -2,7 +2,8 @@
 call plug#begin('~/.vim/plugged')
 " === Colors
 Plug 'vim-scripts/CycleColor'
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
+Plug 'danielwe/base16-vim'
 Plug 'jacoborus/tender.vim'
 Plug 'dikiaap/minimalist'
 Plug 'dylanaraps/crayon'
@@ -16,7 +17,7 @@ Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plug 'yggdroot/indentline'
+" Plug 'yggdroot/indentline'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf.vim'
 Plug 'mattn/emmet-vim'
@@ -35,6 +36,11 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'sjl/gundo.vim'
 Plug 'vim-scripts/VisIncr'
 Plug 'drwx/calutil.vim'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'jremmen/vim-ripgrep'
+Plug 'mattn/webapi-vim'
+Plug 'jceb/vim-orgmode'
+Plug 'tpope/vim-speeddating'
 
 
 
@@ -78,6 +84,24 @@ Plug 'lervag/vimtex'
 " Plug 'riher/python-mode',{ 'branch': 'fix/py3-importlib' }
 Plug 'vim-python/python-syntax'
 
+" === Scheme
+Plug 'kovisoft/slimv'
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'calebsmith/vim-lambdify'
+
+" === Rust
+Plug 'rust-lang/rust.vim'
+Plug 'rhysd/rust-doc.vim'
+Plug 'racer-rust/vim-racer'
+Plug 'pest-parser/pest.vim'
+
+Plug 'beyondmarc/glsl.vim'
+
+" === Writing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'beloglazov/vim-online-thesaurus'
+
 call plug#end()
 
 
@@ -113,7 +137,8 @@ let g:ale_fixers = {
 \   'python': [ 'add_blank_lines_for_python_control_statements', 'autopep8',
 \     'black', 'isort', 'remove_trailing_lines', 'trim_whitespace', 'yapf']
 \}
-
+let g:ale_linters = {'rust': ['rls']}
+let g:ale_rust_rls_toolchain ='stable'
 
 let g:ale_set_balloons= 1
 
@@ -130,63 +155,47 @@ autocmd FileType json let g:vim_json_syntax_conceal = 0
 set termguicolors
 set t_Co=256
 colorscheme base16-material-darker
-if g:colors_name=="tender"
-  hi Normal guibg=#282828
-  hi Comment ctermfg=244 guifg=#909090
-  hi Error guifg=#ff0000 guibg=#282828
-  hi Pmenu  guibg=#808080
-  hi PmenuSel guibg=#A0A0A0
-  hi Operator guifg=#c9d05c
-  hi! link cssNoise Operator
-  hi Visual ctermfg=235 ctermbg=185 guifg=#282828 guibg=#c9d05c
-  hi QuickFixLine ctermfg=235 ctermbg=185 guifg=#282828 guibg=#c9d05c
-  hi SignColumn ctermbg=235 guibg=#1b1d1e
-  hi Comment cterm=italic gui=italic
-  au InsertEnter * hi Normal ctermbg=234 guibg=#000000
-  au InsertLeave * hi Normal ctermbg=235 guibg=#282828
-  au BufNewFile,BufRead * hi Normal ctermbg=235 guibg=#282828
-endif
 
-if g:colors_name=~"^base16-"
-  au InsertEnter * call Base16hi("CursorLine","","101010","","","","")
-  au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
-  au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
-  au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
-  call Base16hi("LineNr",g:base16_gui04,g:base16_gui00,"","","","")
-  call Base16hi("CursorLineNr",g:base16_gui05,g:base16_gui00,"","","","")
-  call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
-  call Base16hi("SignColumn","",g:base16_gui00,"","","","")
-  call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
-  call Base16hi("GitGutterChange","",g:base16_gui00,"","","","")
-  call Base16hi("GitGutterDelete","",g:base16_gui00,"","","","")
-  call Base16hi("GitGutterChangeDelete","",g:base16_gui00,"","","","")
-  call Base16hi("NonText",g:base16_gui02,"","","","","")
-  call Base16hi("SpecialKey",g:base16_gui03,"","","","","")
-  call Base16hi("Error","ff0000",g:base16_gui00,"","","","")
-  call Base16hi("ALEError","ff0000","","","","underline","")
-  call Base16hi("YcmErrorSign","ff0000","","","","","")
-  call Base16hi("YcmErrorSection","ff0000","","","","underline","")
-  let g:indentLine_color_gui = '#282a2e'
-  let g:indentLine_concealcursor=0
-  au VimEnter * call matchadd('SpecialKey', '\s', -1)
-  au VimEnter * call matchadd('SpecialKey', '$', -1)
-  set cursorline
-  hi! link typescriptReserved Keyword
-  hi! link jsxCloseTag jsxTag
-  hi! link jsxCloseString jsxTag
-  hi! link xmlTag Operator
-  hi! link xmlEndTag Operator
-  hi! link tsxComponent Function
-  hi! link tsxIntrinsicElement Structure
-  hi! link embeddedTsStart Statement
-  hi! link embeddedTsEnd Statement
-  hi Visual guifg=#282828 guibg=#c9d05c
-  highlight DiffAdd    guifg=#000000 guibg=#99cc99
-  highlight DiffDelete guifg=#000000 guibg=#f2777a
-  highlight DiffChange guifg=#000000 guibg=#ffcc66
-  highlight DiffText   guifg=#ef2929 guibg=#ffcc66
+au InsertEnter * call Base16hi("CursorLine","","101010","","","","")
+au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
+au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
+au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
+call Base16hi("LineNr",g:base16_gui04,g:base16_gui00,"","","","")
+call Base16hi("CursorLineNr",g:base16_gui05,g:base16_gui00,"","","","")
+call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
+call Base16hi("SignColumn","",g:base16_gui00,"","","","")
+call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
+call Base16hi("GitGutterChange","",g:base16_gui00,"","","","")
+call Base16hi("GitGutterDelete","",g:base16_gui00,"","","","")
+call Base16hi("GitGutterChangeDelete","",g:base16_gui00,"","","","")
+call Base16hi("NonText",g:base16_gui02,"","","","","")
+call Base16hi("SpecialKey",g:base16_gui03,"","","","","")
+call Base16hi("Error","ff0000",g:base16_gui00,"","","","")
+call Base16hi("ALEError","ff0000","","","","underline","")
+call Base16hi("YcmErrorSign","ff0000","","","","","")
+call Base16hi("YcmErrorSection","ff0000","","","","underline","")
+let g:indentLine_color_gui = '#282a2e'
+let g:indentLine_concealcursor=0
+au VimEnter * call matchadd('SpecialKey', '\s', -1)
+au VimEnter * call matchadd('SpecialKey', '$', -1)
+set cursorline
+highlight clear CursorLineNR
+hi! link typescriptReserved Keyword
+hi! link jsxCloseTag jsxTag
+hi! link jsxCloseString jsxTag
+hi! link xmlTag Operator
+hi! link xmlEndTag Operator
+hi! link tsxComponent Function
+hi! link tsxIntrinsicElement Structure
+hi! link embeddedTsStart Statement
+hi! link embeddedTsEnd Statement
+hi! link schemeParentheses Normal
+hi Visual guifg=#282828 guibg=#c9d05c
+highlight DiffAdd    guifg=#000000 guibg=#99cc99
+highlight DiffDelete guifg=#000000 guibg=#f2777a
+highlight DiffChange guifg=#000000 guibg=#ffcc66
+highlight DiffText   guifg=#ef2929 guibg=#ffcc66
 
-endif
 
 " let g:indentLine_char = '¦'
 let g:indentLine_char = '⌇'
@@ -216,6 +225,7 @@ map <leader>o :call SetBG("NONE")<CR>
 map <leader>O :call SetBG("#".g:base16_gui00)<CR>
 nmap <leader>n :set relativenumber!<CR>
 nmap <leader>N :set number!<CR>
+nmap <leader>g :Goyo<CR>
 
 "highlight last inserted text
 nnoremap gV `[v`]
@@ -349,3 +359,77 @@ endif
 set undodir=~/.vim/undo//
 set undofile
 set directory=~/.vim/swap//
+
+" Chicken Scheme
+let g:is_chicken = 1
+setl lispwords+=let-values,condition-case,with-input-from-string
+setl lispwords+=with-output-to-string,handle-exceptions,call/cc,rec,receive
+setl lispwords+=call-with-output-file
+
+
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+
+let g:rbpt_max = 16
+
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[0 q"
+
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
+let g:rustfmt_autosave = 1
+
+
+set spelllang=en_gb
+set spellfile=~/.vim/spell/en_gb.utf-8.add
+
+function! s:goyo_enter()
+  Limelight
+  set noshowmode
+  set noshowcmd
+  set nolist
+  set wrap
+  set linebreak
+  set display+=lastline
+  set spell
+  nnoremap j gj
+  nnoremap k gk
+endfunction
+
+function! s:goyo_leave()
+  Limelight!
+  set showmode
+  set showcmd
+  set nowrap
+  set nolinebreak
+  set list
+  set nospell
+  unmap j
+  unmap k
+  highlight clear CursorLineNR
+  call SetBG("#".g:base16_gui00)
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
