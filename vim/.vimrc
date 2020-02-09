@@ -1,6 +1,10 @@
+if has('python3')
+endif
 " Plugins
 call plug#begin('~/.vim/plugged')
 " === Colors
+
+Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/CycleColor'
 " Plug 'chriskempson/base16-vim'
 Plug 'danielwe/base16-vim'
@@ -41,6 +45,8 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'mattn/webapi-vim'
 Plug 'jceb/vim-orgmode'
 Plug 'tpope/vim-speeddating'
+Plug 'machakann/vim-swap'
+Plug 'terryma/vim-smooth-scroll'
 
 
 
@@ -102,6 +108,13 @@ Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'beloglazov/vim-online-thesaurus'
 
+" === Markdown
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+Plug 'jxnblk/vim-mdx-js'
+
+
 call plug#end()
 
 
@@ -110,9 +123,15 @@ let g:python_highlight_all = 1
 
 let g:gundo_prefer_python3 = 1
 
-let g:UltiSnipsExpandTrigger="<c-_>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsSnippetDirectories=['~/.vim/UltiSnips', 'UltiSnips']
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
 
 let g:user_emmet_mode='iv'
 let g:user_emmet_leader_key=';'
@@ -130,6 +149,7 @@ let g:ycm_warning_symbol = '●'
 let g:ale_fix_on_save = 1
 let g:ale_fixers = {
 \   'javascript': ['eslint', 'prettier'],
+\   'javascript.jsx': ['eslint', 'prettier'],
 \   'typescript': ['tslint', 'prettier'],
 \   'typescript.tsx': ['tslint', 'prettier'],
 \   'css': ['prettier'],
@@ -145,6 +165,9 @@ let g:ale_set_balloons= 1
 let g:ycm_enable_diagnostic_highlighting = 0
 
 let g:pandoc#syntax#conceal#use =0
+let g:pandoc#filetypes#handled = ["pandoc", "markdown"]
+let g:pandoc#filetypes#pandoc_markdown = 0
+
 
 " autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
 " autocmd BufWritePost *.ts,*.tsx AsyncRun -post=checktime ./node_modules/.bin/tslint --fix % && npx prettier --parser typescript --write %
@@ -226,6 +249,8 @@ map <leader>O :call SetBG("#".g:base16_gui00)<CR>
 nmap <leader>n :set relativenumber!<CR>
 nmap <leader>N :set number!<CR>
 nmap <leader>g :Goyo<CR>
+nmap <leader>p "+p
+nmap <leader>P "+P
 
 "highlight last inserted text
 nnoremap gV `[v`]
@@ -401,7 +426,7 @@ let g:rustfmt_autosave = 1
 
 
 set spelllang=en_gb
-set spellfile=~/.vim/spell/en_gb.utf-8.add
+set spellfile=~/.vim/spell/en.utf-8.add
 
 function! s:goyo_enter()
   Limelight
@@ -432,4 +457,18 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal_code_blocks = 0
+
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
+
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 1)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 1)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 2)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 2)<CR>
+
 
