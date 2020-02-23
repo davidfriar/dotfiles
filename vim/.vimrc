@@ -4,15 +4,15 @@ endif
 call plug#begin('~/.vim/plugged')
 " === Colors
 
-Plug 'altercation/vim-colors-solarized'
-Plug 'vim-scripts/CycleColor'
-" Plug 'chriskempson/base16-vim'
-Plug 'danielwe/base16-vim'
-Plug 'jacoborus/tender.vim'
-Plug 'dikiaap/minimalist'
-Plug 'dylanaraps/crayon'
-Plug 'morhetz/gruvbox'
 Plug 'lifepillar/vim-solarized8'
+" Plug 'vim-scripts/CycleColor'
+" Plug 'chriskempson/base16-vim'
+" Plug 'danielwe/base16-vim'
+" Plug 'jacoborus/tender.vim'
+" Plug 'dikiaap/minimalist'
+" Plug 'dylanaraps/crayon'
+" Plug 'morhetz/gruvbox'
+" Plug 'lifepillar/vim-solarized8'
 " Plug 'rafi/awesome-:wvim-colorschemes'
 
 " === Misc
@@ -20,7 +20,9 @@ Plug 'scrooloose/nerdtree'
 Plug 'jeetsukumaran/vim-filebeagle'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Plug 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 " Plug 'yggdroot/indentline'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf.vim'
@@ -176,33 +178,53 @@ let g:pandoc#filetypes#pandoc_markdown = 0
 autocmd FileType json let g:vim_json_syntax_conceal = 0
 
 set termguicolors
-set t_Co=256
-colorscheme base16-material-darker
+" set t_Co=256
+set background=dark
+colorscheme solarized8
+let g:solarized_diffmode="high"
+hi EndOfBuffer guifg=bg
+:exe 'hi SpecialKey guibg=NONE guifg=' g:terminal_ansi_colors[0]
+:exe 'hi Error guibg=' g:terminal_ansi_colors[0] 'guifg=' g:terminal_ansi_colors[1] 'gui=bold cterm=bold'
+:exe 'hi ALEError guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
+:exe 'hi YcmErrorSign guibg=NONE guifg=' g:terminal_ansi_colors[1]
+:exe 'hi YcmErrorSection guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
 
-au InsertEnter * call Base16hi("CursorLine","","101010","","","","")
-au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
-au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
-au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
-call Base16hi("LineNr",g:base16_gui04,g:base16_gui00,"","","","")
-call Base16hi("CursorLineNr",g:base16_gui05,g:base16_gui00,"","","","")
-call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
-call Base16hi("SignColumn","",g:base16_gui00,"","","","")
-call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
-call Base16hi("GitGutterChange","",g:base16_gui00,"","","","")
-call Base16hi("GitGutterDelete","",g:base16_gui00,"","","","")
-call Base16hi("GitGutterChangeDelete","",g:base16_gui00,"","","","")
-call Base16hi("NonText",g:base16_gui02,"","","","","")
-call Base16hi("SpecialKey",g:base16_gui03,"","","","","")
-call Base16hi("Error","ff0000",g:base16_gui00,"","","","")
-call Base16hi("ALEError","ff0000","","","","underline","")
-call Base16hi("YcmErrorSign","ff0000","","","","","")
-call Base16hi("YcmErrorSection","ff0000","","","","underline","")
-let g:indentLine_color_gui = '#282a2e'
-let g:indentLine_concealcursor=0
+set fillchars+=vert:│
+:exe 'hi VertSplit guifg=bg guibg=' g:terminal_ansi_colors[0]
+
+let g:gitgutter_sign_priority = 9
+
+
+let g:airline_powerline_fonts = 1
+let g:airline_skip_empty_sections = 1
+let g:airline_solarized_bg='dark'
+" let g:airline_solarized_normal_green = 1
+let g:airline_solarized_dark_text = 1
+let g:airline_solarized_dark_inactive_border = 1
+" au InsertEnter * call Base16hi("CursorLine","","101010","","","","")
+" au InsertLeave * call Base16hi("CursorLine","",g:base16_gui01,"","","","")
+" au InsertEnter * call Base16hi("CursorLineNr","","101010","","","","")
+" au InsertLeave * call Base16hi("CursorLineNr","",g:base16_gui01,"","","","")
+" call Base16hi("LineNr",g:base16_gui04,g:base16_gui00,"","","","")
+" call Base16hi("CursorLineNr",g:base16_gui05,g:base16_gui00,"","","","")
+" call Base16hi("Comment",g:base16_gui04,g:base16_gui00,"","","italic","")
+" call Base16hi("SignColumn","",g:base16_gui00,"","","","")
+" call Base16hi("GitGutterAdd","",g:base16_gui00,"","","","")
+" call Base16hi("GitGutterChange","",g:base16_gui00,"","","","")
+" call Base16hi("GitGutterDelete","",g:base16_gui00,"","","","")
+" call Base16hi("GitGutterChangeDelete","",g:base16_gui00,"","","","")
+" call Base16hi("NonText",g:base16_gui02,"","","","","")
+" call Base16hi("SpecialKey",g:base16_gui03,"","","","","")
+" call Base16hi("Error","ff0000",g:base16_gui00,"","","","")
+" call Base16hi("ALEError","ff0000","","","","underline","")
+" call Base16hi("YcmErrorSign","ff0000","","","","","")
+" call Base16hi("YcmErrorSection","ff0000","","","","underline","")
+" let g:indentLine_color_gui = '#282a2e'
+" let g:indentLine_concealcursor=0
 au VimEnter * call matchadd('SpecialKey', '\s', -1)
 au VimEnter * call matchadd('SpecialKey', '$', -1)
 set cursorline
-highlight clear CursorLineNR
+" highlight clear CursorLineNR
 hi! link typescriptReserved Keyword
 hi! link jsxCloseTag jsxTag
 hi! link jsxCloseString jsxTag
@@ -213,16 +235,16 @@ hi! link tsxIntrinsicElement Structure
 hi! link embeddedTsStart Statement
 hi! link embeddedTsEnd Statement
 hi! link schemeParentheses Normal
-hi Visual guifg=#282828 guibg=#c9d05c
-highlight DiffAdd    guifg=#000000 guibg=#99cc99
-highlight DiffDelete guifg=#000000 guibg=#f2777a
-highlight DiffChange guifg=#000000 guibg=#ffcc66
-highlight DiffText   guifg=#ef2929 guibg=#ffcc66
+" hi Visual guifg=#282828 guibg=#c9d05c
+" highlight DiffAdd    guifg=#000000 guibg=#99cc99
+" highlight DiffDelete guifg=#000000 guibg=#f2777a
+" highlight DiffChange guifg=#000000 guibg=#ffcc66
+" highlight DiffText   guifg=#ef2929 guibg=#ffcc66
 
 
 " let g:indentLine_char = '¦'
-let g:indentLine_char = '⌇'
-let g:indentLine_setConceal = 1
+" let g:indentLine_char = '⌇'
+" let g:indentLine_setConceal = 1
 set list
 set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¬
 
@@ -233,8 +255,8 @@ let NERDTreeAutoDeleteBuffer = 1
 let NERDTreeQuitOnOpen = 1
 let NERDTreeHijackNetrw = 0
 let NERDTreeShowHidden=1
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 let g:filebeagle_show_hidden = 1
 
@@ -244,8 +266,8 @@ let maplocalleader="\\"
 map <leader>s :source ~/.vimrc<CR>
 map <leader>t :NERDTreeToggle<CR>
 vmap <leader>c "+y
-map <leader>o :call SetBG("NONE")<CR>
-map <leader>O :call SetBG("#".g:base16_gui00)<CR>
+" map <leader>o :call SetBG("NONE")<CR>
+" map <leader>O :call SetBG("#".g:base16_gui00)<CR>
 nmap <leader>n :set relativenumber!<CR>
 nmap <leader>N :set number!<CR>
 nmap <leader>g :Goyo<CR>
@@ -258,16 +280,16 @@ nnoremap gV `[v`]
 nnoremap <leader>u :GundoToggle<CR>
 
 
-function! SetBG(colour)
-  exec "hi Normal guibg=" . a:colour
-  exec "hi Comment guibg=" . a:colour
-  exec "hi LineNr guibg=" . a:colour
-  exec "hi SignColumn guibg=" . a:colour
-  exec "hi GitGutterAdd guibg=" . a:colour
-  exec "hi GitGutterChange guibg=" . a:colour
-  exec "hi GitGutterDelete guibg=" . a:colour
-  exec "hi GitGutterChangeDelete guibg=" . a:colour
-endfunction
+" function! SetBG(colour)
+"   exec "hi Normal guibg=" . a:colour
+"   exec "hi Comment guibg=" . a:colour
+"   exec "hi LineNr guibg=" . a:colour
+"   exec "hi SignColumn guibg=" . a:colour
+"   exec "hi GitGutterAdd guibg=" . a:colour
+"   exec "hi GitGutterChange guibg=" . a:colour
+"   exec "hi GitGutterDelete guibg=" . a:colour
+"   exec "hi GitGutterChangeDelete guibg=" . a:colour
+" endfunction
 
 
 " Quick jumping between splits
@@ -300,8 +322,8 @@ set noshowmode
 noremap <F8> :Geeknote<cr>
 
 
-hi Bang ctermbg=red guibg=red
-match Bang /\%>80v.*\%<82v/
+" hi Bang ctermbg=red guibg=red
+" match Bang /\%>80v.*\%<82v/
 
 set rtp+=/usr/local/opt/fzf
 
@@ -435,8 +457,13 @@ function! s:goyo_enter()
   set nolist
   set wrap
   set linebreak
+  set noruler
+  set laststatus=0
   set display+=lastline
   set spell
+  hi StatusLine guifg=bg guibg=bg gui=NONE term=none cterm=NONE
+  hi StatusLineNC guifg=bg guibg=bg gui=NONE term=none cterm=NONE
+  hi TabLine guifg=bg guibg=bg gui=NONE term=none cterm=NONE
   nnoremap j gj
   nnoremap k gk
 endfunction
@@ -451,8 +478,8 @@ function! s:goyo_leave()
   set nospell
   unmap j
   unmap k
-  highlight clear CursorLineNR
-  call SetBG("#".g:base16_gui00)
+  :exe 'hi SpecialKey guibg=NONE guifg=' g:terminal_ansi_colors[0]
+  " highlight clear CursorLineNR
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
@@ -470,5 +497,4 @@ noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 1)<CR>
 noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 1)<CR>
 noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 2)<CR>
 noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 2)<CR>
-
 
