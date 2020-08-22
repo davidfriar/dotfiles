@@ -36,9 +36,11 @@
  '(fci-rule-color "#515151")
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
  '(frame-background-mode (quote dark))
+ '(js2-strict-inconsistent-return-warning nil)
+ '(js2-strict-missing-semi-warning nil)
  '(package-selected-packages
    (quote
-    (org-protocol evil-org org-bullets helm-company helm-descbinds helm-ag ranger treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-projectile projectile hydra git-gutter general evil-magit neotree all-the-icons powerline-evil color-theme-sanityinc-tomorrow diminish company evil-commentary rainbow-delimiters which-key evil-visual-mark-mode)))
+    (notmuch prettier-js prettier-js-mode add-node-modules-path flycheck rjsx-mode xref-js2 company-web ac-html-bootstrap ac-html-angular emmet-mode web-mode-edit-element json-mode js2-refactor js-comint company-tern tern js2-mode impatient-mode web-mode org-protocol evil-org org-bullets helm-company helm-descbinds helm-ag ranger treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-projectile projectile hydra git-gutter general evil-magit neotree all-the-icons powerline-evil color-theme-sanityinc-tomorrow diminish company evil-commentary rainbow-delimiters which-key evil-visual-mark-mode)))
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote

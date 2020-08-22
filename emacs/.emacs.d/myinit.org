@@ -151,7 +151,7 @@ Get rid of menu and toolbar etc...
             treemacs-silent-filewatch              nil
             treemacs-silent-refresh                nil
             treemacs-sorting                       'alphabetic-desc
-            treemacs-space-between-root-nodes      t
+            treemacs-space-between-root-nodes      nil 
             treemacs-tag-follow-cleanup            t
             treemacs-tag-follow-delay              1.5
             treemacs-width                         35)
@@ -206,6 +206,8 @@ Get rid of menu and toolbar etc...
     :ensure t
     :mode ("\\.org\\'" . org-mode)
     :config 
+        (setq org-directory  "~/Dropbox (Cognifide)/org/")
+        (setq org-agenda-files  '("~/Dropbox (Cognifide)/org/"))
         (setq org-default-notes-file "~/Dropbox (Cognifide)/org/inbox.org")
         (add-hook 'org-capture-mode-hook (lambda() 
             (evil-insert-state)
@@ -241,6 +243,11 @@ Get rid of menu and toolbar etc...
             (delete-frame))))
 
         (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
+        
+        (setq org-refile-targets '((nil :maxlevel . 1)
+                                        (org-agenda-files :maxlevel . 1)))
+        (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+        (setq org-refile-use-outline-path t)                  ; Show full paths for refiling
   )
 
   (use-package org-protocol 
@@ -285,6 +292,19 @@ Get rid of menu and toolbar etc...
   :diminish company-mode)
   
 #+end_src 
+** FlyCheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck               
+  :ensure t
+  :config
+    (setq-default flycheck-disabled-checkers
+              (append flycheck-disabled-checkers
+                      '(javascript-jshint json-jsonlist)))
+    (add-hook 'after-init-hook #'global-flycheck-mode)
+)
+ 
+#+end_src 
+
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit :ensure t :after evil)
@@ -324,6 +344,186 @@ Git gutter:
               (git-gutter:clear))
        :color blue))
 #+end_src 
+* Web
+#+BEGIN_SRC emacs-lisp
+
+(use-package add-node-modules-path
+    :ensure t
+    :config (add-hook 'flycheck-mode-hook 'add-node-modules-path)
+            (add-hook 'prettier-mode-hook 'add-node-modules-path)
+
+)
+(use-package web-mode
+  :ensure t
+  :bind (("C-c ]" . emmet-next-edit-point)
+         ("C-c [" . emmet-prev-edit-point)
+         ("C-c o b" . browse-url-of-file))
+  :mode
+  (("\\.js\\'" . web-mode)
+   ("\\.html?\\'" . web-mode)
+   ("\\.phtml?\\'" . web-mode)
+   ("\\.tpl\\.php\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)
+   ("\\.jsx$" . web-mode))
+  :config
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2)
+        
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
+
+  ;; highlight enclosing tags of the element under cursor
+  (setq web-mode-enable-current-element-highlight t)
+
+  (defadvice web-mode-highlight-part (around tweak-jsx activate)
+    (if (equal web-mode-content-type "jsx")
+        (let ((web-mode-enable-part-face nil))
+          ad-do-it)
+      ad-do-it))
+      
+  (add-hook 'web-mode-hook 'add-node-modules-path)
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+    
+  ;; editing enhancements for web-mode
+  ;; https://github.com/jtkDvlp/web-mode-edit-element
+  (use-package web-mode-edit-element
+    :ensure t
+    :config (add-hook 'web-mode-hook 'web-mode-edit-element-minor-mode))
+
+  ;; snippets for HTML
+  ;; https://github.com/smihica/emmet-mode
+  (use-package emmet-mode
+    :ensure t
+    :init (setq emmet-move-cursor-between-quotes t) ;; default nil
+    :diminish (emmet-mode . " e"))
+  (add-hook 'web-mode-hook 'emmet-mode)
+
+  (defun my-web-mode-hook ()
+    "Hook for `web-mode' config for company-backends."
+    (set (make-local-variable 'company-backends)
+         '((company-tern company-css company-web-html company-files))))
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+  ;; Enable JavaScript completion between <script>...</script> etc.
+  (defadvice company-tern (before web-mode-set-up-ac-sources activate)
+    "Set `tern-mode' based on current language before running company-tern."
+    (message "advice")
+    (if (equal major-mode 'web-mode)
+	(let ((web-mode-cur-language
+	       (web-mode-language-at-pos)))
+	  (if (or (string= web-mode-cur-language "javascript")
+		  (string= web-mode-cur-language "jsx"))
+	      (unless tern-mode (tern-mode))
+	    (if tern-mode (tern-mode -1))))))
+  (add-hook 'web-mode-hook 'company-mode)
+
+  ;; to get completion data for angularJS
+  (use-package ac-html-angular :defer t :ensure t)
+  ;; to get completion for twitter bootstrap
+  (use-package ac-html-bootstrap :defer t :ensure t)
+
+  ;; to get completion for HTML stuff
+  ;; https://github.com/osv/company-web
+  (use-package company-web
+    :ensure t)
+
+  (add-hook 'web-mode-hook 'company-mode))
+
+;; configure CSS mode company backends
+(use-package css-mode 
+  :ensure t
+  :config
+  (defun my-css-mode-hook ()
+    (set (make-local-variable 'company-backends)
+         '((company-css company-dabbrev-code company-files))))
+  (add-hook 'css-mode-hook 'my-css-mode-hook)
+  (add-hook 'css-mode-hook 'company-mode))
+
+;; impatient mode - Live refresh of web pages
+;; https://github.com/skeeto/impatient-mode
+(use-package impatient-mode 
+  :ensure t
+  :diminish (impatient-mode . " i")
+  :commands (impatient-mode))
+#+END_SRC
+* JavaScript
+#+BEGIN_SRC emacs-lisp
+;; js2-mode
+;; https://github.com/mooz/js2-mode
+(use-package js2-mode
+  :ensure t
+  :bind (:map js2-mode-map
+              (("C-x C-e" . js-send-last-sexp)
+               ("C-M-x" . js-send-last-sexp-and-go)
+               ("C-c C-b" . js-send-buffer-and-go)
+               ("C-c C-l" . js-load-file-and-go)))
+  :mode
+    ;("\\.js$" . js2-mode)
+    ;("\\.json$" . js2-jsx-mode)
+  :config
+    (custom-set-variables '(js2-strict-inconsistent-return-warning nil))
+    (custom-set-variables '(js2-strict-missing-semi-warning nil))
+    (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+    (setq js-indent-level 2)
+    (setq js2-indent-level 2)
+    (setq js2-basic-offset 2)
+)
+
+(use-package rjsx-mode
+    :ensure t
+    :mode
+    ;("\\.js$" . rjsx-mode)
+) 
+
+(use-package company-tern
+    :ensure t)
+(use-package tern
+  :ensure t
+  :config
+    (add-to-list 'company-backends 'company-tern)
+    (add-hook 'js2-mode-hook (lambda ()
+                           (tern-mode)
+                           (company-mode))))
+
+  ;; Run a JavaScript interpreter in an inferior process window
+  ;; https://github.com/redguardtoo/js-comint
+  (use-package js-comint
+    :ensure t
+    :config
+    (setq inferior-js-program-command "node"))
+
+  ;; js2-refactor :- refactoring options for emacs
+  ;; https://github.com/magnars/js2-refactor.el
+  (use-package js2-refactor 
+    :ensure t
+    :config
+    (js2r-add-keybindings-with-prefix "C-c j r")
+  (add-hook 'js2-mode-hook 'js2-refactor-mode))
+
+
+  (use-package xref-js2
+    :ensure t
+    :config
+    (add-hook 'js2-mode-hook (lambda ()
+    (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+    
+
+  (use-package prettier-js
+    :ensure t
+    :config 
+        (defun web-mode-init-prettier-hook ()
+            (add-node-modules-path)
+            (prettier-js-mode))
+
+        (add-hook 'web-mode-hook  'web-mode-init-prettier-hook)
+        (add-hook 'js2-mode-hook  'web-mode-init-prettier-hook))
+#+END_SRC
 * other
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters :ensure t)
@@ -357,7 +557,8 @@ Git gutter:
   (setq undo-tree-auto-save-history t)
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
-
+    (use-package notmuch 
+        :ensure t)
 
 
 #+END_SRC

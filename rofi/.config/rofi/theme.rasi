@@ -1,49 +1,49 @@
 * {
     font: "Noto Sans Nerd Font 12";
-    text-color:  #ffeedd;
-    background-color:  rgba(0,0,0,0);
-    dark: #1c1c1c;
-    // Black
-    black:       #3d352a;
-    lightblack:  #444444;
-    //
-    // Red
-    red:         #cd5c5c;
-    lightred:    #cc5533;
-    //
-    // Green
-    green:       #86af80;
-    lightgreen:  #88cc22;
-    //
-    // Yellow
-    yellow:      #e8ae5b;
-    lightyellow:     #ffa75d;
-    //
-    // Blue
-    blue:      #6495ed;
-    lightblue:     #87ceeb;
-    //
-    // Magenta
-    magenta:      #deb887;
-    lightmagenta:     #996600;
-    //
-    // Cyan
-    cyan:      #b0c4de;
-    lightcyan:     #b0c4de;
-    //
-    // White
-    white:      #bbaa99;
-    lightwhite:     #ddccbb;
-    //
-    // Bold, Italic, Underline
-    highlight:     bold #ffffff;
+
+    // Solarized Dark colors
+
+    /* base03:#002b36; */
+    /* base02: #073642; */
+    /* base01: #586e75; */
+    /* base00: #657b83; */
+    /* base0: #839496; */
+    /* base1: #93a1a1; */
+    /* base2: #eee8d5; */
+    /* base3: #fdf6e3; */
+    /* yellow: #b58900; */
+    /* orange: #cb4b16; */
+    /* red: #dc322f; */
+    /* magenta: #d33682; */
+    /* violet: #6c71c4; */
+    /* blue: #268bd2; */
+    /* cyan: #2aa198; */
+    /* green: #859900; */
+
+
+    //Gruvbox dark colors
+    base03:#282828;
+    base02: #3c3836;
+    base0: #ebdbb2;
+    base1: #fbf1c7;
+    yellow: #d79921;
+    orange: #d65d0e;
+    red: #cc241d;
+    magenta: #b16286;
+    //violet: #;
+    blue: #458588;
+    cyan: #689d6a;
+    green: #98971a;
+
+    text-color:  @base0;
+    background-color:rgba(0,0,0,0);
 }
 #window {
     fullscreen: true;
     location: west;
     anchor:   west;
     border:  0px 2px 0px 0px;
-    text-color: @lightwhite;
+    text-color: @base1;
 
     orientation: horizontal;
     children: [mainbox, dummy];
@@ -55,26 +55,27 @@
 
 #sidebar {
     border: 2px 0px 0px 0px;
-    background-color: @lightblack;
+    background-color: @base02;
     padding: 10px;
 }
 #button selected {
-    border-color: @lightgreen;
-    text-color: @lightgreen;
+    border-color: @green;
+    text-color: @green;
 }
 #entry {
     width: 20em;
 }
 #inputbar {
-    background-color: @lightblack;
-    text-color: @lightgreen;
+    background-color: @base03;
+    text-color: @yellow;
     padding: 2px;
-    border: 0px 0px 0px 0px;
 }
 #mainbox {
     expand: false;
-    background-color: #1c1c1cff;
+    background-color: @base02;
     spacing: 1em;
+    border: 0px 1px 0px 0px;
+    border-color:#000000;
 }
 #listview {
     padding: 0em 0.4em 0em 1em;
@@ -82,29 +83,30 @@
     lines: 0;
 }
 #element selected  normal {
-    background-color: @blue;
+    background-color: @yellow;
+    text-color: @base03;
 }
 #element normal active {
-    text-color: @lightblue;
+    text-color: @blue;
 }
 #element normal urgent {
-    text-color: @lightred;
+    text-color: @orange;
 }
 #element alternate normal {
 }
 #element alternate active {
-    text-color: @lightblue;
+    text-color: @blue;
 }
 #element alternate urgent {
-    text-color: @lightred;
+    text-color: @orange;
 }
 #element selected active {
-    background-color: @lightblue;
-    text-color: @dark;
+    background-color: @blue;
+    text-color: @base03;
 }
 #element selected urgent {
-    background-color: @lightred;
-    text-color: @dark;
+    background-color: @orange;
+    text-color: @base03;
 }
 #inputbar {
     children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
@@ -113,5 +115,7 @@
     expand:     false;
     str:        ":";
     margin:     0px 0.3em 0em 0em ;
-    text-color: @normal-foreground;
+}
+#entry {
+  text-color: @yellow;
 }

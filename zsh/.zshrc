@@ -61,12 +61,12 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(vi-mode git zsh-syntax-highlighting zsh-autosuggestions colored-man-pages httpie virtualenv)
+plugins=(vi-mode git colored-man-pages httpie virtualenv)
 
 source $ZSH/oh-my-zsh.sh
 
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -97,13 +97,9 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export EDITOR='vim'
+# export TERM="xterm-256color"
 
-alias vi="vim"
-alias v='f -t -e vim -b viminfo'
-alias ra="source ranger"
-
-
-
+setopt globdots
 
 eval $(thefuck --alias)
 
@@ -112,9 +108,9 @@ bindkey "^[OA" up-line-or-beginning-search
 bindkey "^[OB" down-line-or-beginning-search
 
 path+=~/bin
-path+=~/.gem/ruby/2.5.0/bin
-path+=~/.local/bin
-
+path+=~/.gem/ruby/2.7.0/bin
+path+=(~/.local/bin path)
+path+=~/.cargo/bin
 
 
 opgp() {
@@ -131,8 +127,32 @@ opgpp(){
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git --color=always'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--ansi"
+
+
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
  export PATH=~/.npm-global/bin:$PATH
 
 export EDITOR=vim
+
+export BC_ENV_ARGS='/home/david/.bc'
+
+source /home/david/.config/broot/launcher/bash/br
+
+eval "$RUN"
+
+export QT_QPA_PLATFORMTHEME=qt5ct
+# export XDG_CURRENT_DESKTOP=KDE
+
+fm()
+{
+local dst="$(command vifmrun --choose-dir - "$@")"
+if [ -z "$dst" ]; then
+  echo 'Directory picking cancelled/failed'
+  return 1
+fi
+cd "$dst"
+                                  }

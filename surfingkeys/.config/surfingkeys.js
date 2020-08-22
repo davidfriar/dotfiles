@@ -39,7 +39,10 @@ settings.theme = `
     color: #4e9a06;
 }
 .sk_theme #sk_omnibarSearchResult>ul>li:nth-child(odd) {
-    background: #303030;
+    background: #303030; !important
+}
+.sk_theme #sk_omnibarSearchResult>ul>li:nth-child(even) {
+    background: #303030; !important
 }
 .sk_theme #sk_omnibarSearchResult>ul>li.focused {
     background: #3e4452;
@@ -48,5 +51,4 @@ settings.theme = `
     font-size: 20pt;
 }`;
 // only keep E, R and T from Surfingkeys for gmail.com and twitter.com
-unmapAllExcept(['E','R','T'], /mail.google.com|gmail.com|twitter.com/);
-
+unmapAllExcept(["E", "R", "T"], /mail.google.com|gmail.com|twitter.com/);

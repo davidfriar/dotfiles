@@ -4,7 +4,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " === Colors
 Plug 'lifepillar/vim-solarized8'
-
+Plug 'morhetz/gruvbox'
 " === Misc
 Plug 'scrooloose/nerdtree'
 Plug 'jeetsukumaran/vim-filebeagle'
@@ -37,6 +37,7 @@ Plug 'jceb/vim-orgmode'
 Plug 'tpope/vim-speeddating'
 Plug 'machakann/vim-swap'
 Plug 'terryma/vim-smooth-scroll'
+Plug 'vimwiki/vimwiki'
 
 " === IDE
 Plug 'w0rp/ale'
@@ -57,6 +58,11 @@ Plug 'pangloss/vim-javascript'
 
 " === JSON
 Plug 'elzr/vim-json'
+
+" === Haskell
+Plug 'neovimhaskell/haskell-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'alx741/vim-hindent'
 
 " === Typescript
 Plug 'leafgarland/typescript-vim', {'for': ['typescript', 'typescript.tsx']}
@@ -92,6 +98,9 @@ Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 Plug 'jxnblk/vim-mdx-js'
 
+" === Openscad
+Plug 'sirtaj/vim-openscad'
+
 call plug#end()
 
 
@@ -116,7 +125,9 @@ let g:user_emmet_settings = { 'javascript.jsx' : {  'extends' : 'jsx', }, }
 
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
+let g:ycm_filetype_blacklist = { 'haskell': 1 }
 
+let g:ale_enabled = 0 " start disabled to be more responsive and not interfere with Haskell -- find a better way to do this
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_sign_error = '●' " Less aggressive than the default '>>'
@@ -134,7 +145,10 @@ let g:ale_fixers = {
 \   'python': [ 'add_blank_lines_for_python_control_statements', 'autopep8',
 \     'black', 'isort', 'remove_trailing_lines', 'trim_whitespace', 'yapf']
 \}
-let g:ale_linters = {'rust': ['rls']}
+let g:ale_linters = {
+  \ 'rust': ['rls'],
+  \ 'haskell': ['stack-build', 'stack_ghc', 'hdevtools', 'hie', 'hlint']
+  \}
 let g:ale_rust_rls_toolchain ='stable'
 
 let g:ale_set_balloons= 1
@@ -148,18 +162,31 @@ let g:pandoc#filetypes#pandoc_markdown = 0
 autocmd FileType json let g:vim_json_syntax_conceal = 0
 
 set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set background=dark
-colorscheme solarized8
+let g:gruvbox_italic = 1
+let g:gruvbox_sign_column='bg0'
+let g:gruvbox_improved_warnings=1
+let g:gruvbox_guisp_fallback='fg'
+let g:gruvbox_invert_selection=0
+colorscheme gruvbox
 let g:solarized_diffmode="high"
 hi EndOfBuffer guifg=bg
-:exe 'hi SpecialKey guibg=NONE guifg=' g:terminal_ansi_colors[0]
-:exe 'hi Error guibg=' g:terminal_ansi_colors[0] 'guifg=' g:terminal_ansi_colors[1] 'gui=bold cterm=bold'
-:exe 'hi ALEError guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
-:exe 'hi YcmErrorSign guibg=NONE guifg=' g:terminal_ansi_colors[1]
-:exe 'hi YcmErrorSection guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
 
-set fillchars+=vert:│
-:exe 'hi VertSplit guifg=bg guibg=' g:terminal_ansi_colors[0]
+"Tweaks for GruvBox
+hi! link haskellType GruvboxYellow
+hi! link haskellIdentifier GruvboxBlue
+"
+"
+" Tweaks for solarized
+" :exe 'hi SpecialKey guibg=NONE guifg=' g:terminal_ansi_colors[0]
+" :exe 'hi Error guibg=' g:terminal_ansi_colors[0] 'guifg=' g:terminal_ansi_colors[1] 'gui=bold cterm=bold'
+" :exe 'hi ALEError guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
+" :exe 'hi YcmErrorSign guibg=NONE guifg=' g:terminal_ansi_colors[1]
+" :exe 'hi YcmErrorSection guibg=NONE guifg=' g:terminal_ansi_colors[1] 'gui=underline'
+" set fillchars+=vert:│
+" :exe 'hi VertSplit guifg=bg guibg=' g:terminal_ansi_colors[0]
 
 let g:gitgutter_sign_priority = 9
 
@@ -200,14 +227,13 @@ let g:filebeagle_show_hidden = 1
 let mapleader=" "
 let maplocalleader="\\"
 
-map <leader>s :source ~/.vimrc<CR>
+map <leader>v :source ~/.vimrc<CR>
 map <leader>t :NERDTreeToggle<CR>
-vmap <leader>c "+y
 nmap <leader>n :set relativenumber!<CR>
 nmap <leader>N :set number!<CR>
 nmap <leader>g :Goyo<CR>
-nmap <leader>p "+p
-nmap <leader>P "+P
+nmap <leader>b :ZBuffers<CR>
+nmap <leader>f :ZFiles<CR>
 
 "highlight last inserted text
 nnoremap gV `[v`]
@@ -222,6 +248,7 @@ map <C-L> <C-W>l
 
 
 
+set nocompatible
 set number
 set hidden
 set history=100
@@ -265,7 +292,7 @@ autocmd FileType purescript :iabbrev <buffer> forall ∀
 
 set diffopt+=vertical
 
-let g:fzf_command_prefix = 'Fz'
+let g:fzf_command_prefix = 'Z'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -408,3 +435,93 @@ noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 1)<CR>
 noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 2)<CR>
 noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 2)<CR>
 
+
+" for Coc
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+" if has("patch-8.1.1564")
+"   set signcolumn=number
+" else
+"   set signcolumn=yes
+" endif
+" need to change this so it doesn't mess up ycm...
+inoremap <silent><expr> <c-space> coc#refresh()
+
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>F  <Plug>(coc-format-selected)
+nmap <leader>F  <Plug>(coc-format-selected)
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+
+" Mappings using CoCList:
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+
+let g:hindent_line_length = 100
+
+vnoremap <C-y> "+y
+nnoremap <C-p> "+p
+
+
+let g:vimwiki_list = [{'path': '~/notes/',
+                      \ 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_global_ext = 0
